@@ -1,0 +1,13 @@
+.btnFav {
+    color: white;
+    border: none;
+    padding: 10px 15px;
+}
+
+
+.remove {
+  background-color: red;
+}
+.add {
+    background-color: green;
+}
