@@ -11,12 +11,21 @@ const checkLoginStatus = () => {
 };
 
 
+const checkDetailsPair = () => {
+  if (localStorage.getItem("detailsPair")) {
+    let parsedData = JSON.parse(localStorage.getItem("detailsPair"));
+    return parsedData;
+  } else {
+    return {}
+  }
+};
+
 
 export const DataContextProvider = (props) => {
   const [loginStatus, setLoginStatus] = useState(checkLoginStatus());
   const [symbols, setSymbols] = useState([]);
   const [symbolsData, setSymbolsData] = useState([]);
-  const [detailsPair, setDetailsPair] = useState();
+  const [detailsPair, setDetailsPair] = useState(checkDetailsPair());
 
   useEffect(() => {
     const urlSymbols = "http://localhost:3001/api/symbols";
@@ -54,7 +63,6 @@ export const DataContextProvider = (props) => {
         subscriptionMessages.push(subMessage);
       }
 
-      // Send all subscription messages in the array
       subscriptionMessages.forEach((subMessage) => {
         socket.send(subMessage);
       });
@@ -87,7 +95,6 @@ export const DataContextProvider = (props) => {
     }
 
     const urlOneSymbol = `http://localhost:3001/api/pubticker/${symbol}`;
-    console.log("Fetching data for symbol:", symbol);
 
     fetch(urlOneSymbol)
       .then((response) => {
@@ -103,7 +110,6 @@ export const DataContextProvider = (props) => {
           );
 
           if (existingIndex !== -1) {
-            // If the symbol exists, update it
             const updatedData = [...prevSymbolsData];
             updatedData[existingIndex] = {
               symb: symbol,
@@ -112,7 +118,6 @@ export const DataContextProvider = (props) => {
             };
             return updatedData;
           } else {
-            // If the symbol doesn't exist, add it
             return [...prevSymbolsData, { symb: symbol, data: data }];
           }
         });
@@ -123,11 +128,9 @@ export const DataContextProvider = (props) => {
   };
 
   useEffect(() => {
-    if (symbols.length !== 0) {
-      symbols.forEach((symb) => {
-        fetchSymbolData(symb);
-      });
-    }
+    symbols.forEach((symb) => {
+      fetchSymbolData(symb);
+    });
   }, [symbols]);
 
   const changeLoginStatus = () => {
@@ -140,13 +143,24 @@ export const DataContextProvider = (props) => {
 
   const changeFavoriteStatus = (pair) => {
     const copySymbolsData = [...symbolsData];
-    const pairPosition = symbolsData.map((symbol) => symbol.symb).indexOf(pair.symb);
+    const pairPosition = symbolsData
+      .map((symbol) => symbol.symb)
+      .indexOf(pair.symb);
 
     if (pairPosition !== -1) {
       copySymbolsData[pairPosition] = pair;
       setSymbolsData(copySymbolsData);
     }
   };
+
+  useEffect(() => {
+    window.localStorage.setItem("symbolsData", JSON.stringify(symbolsData));
+  }, [symbolsData]);
+
+  useEffect(() => {
+    window.localStorage.setItem("detailsPair", JSON.stringify(detailsPair));
+    console.log(detailsPair);
+  }, [detailsPair]);
 
   useEffect(() => {
     window.localStorage.setItem("login", JSON.stringify(loginStatus));

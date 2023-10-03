@@ -4,11 +4,11 @@ import { DataContext } from "../../../context/DataContextProvider";
 import "./DetailsPage.css";
 
 const DetailsPage = () => {
-  const { detailsPair,loginStatus , changeFavoriteStatus} = useContext(DataContext);
+  const { detailsPair, loginStatus, changeFavoriteStatus } =
+    useContext(DataContext);
   const [favoritesBtn, setBtn] = useState(loginStatus ? "block" : "none");
   const [btnContent, setBtnContent] = useState("");
   const [currentPair, setCurrentPair] = useState('');
-
 
   useEffect(() => {
     if (loginStatus === false) {
@@ -22,15 +22,13 @@ const DetailsPage = () => {
     setCurrentPair(detailsPair);
   }, []);
 
-
-
   useEffect(() => {
-    if (currentPair.favorite) {
+    if (currentPair ? (currentPair.favorite):null) {
       setBtnContent("Remove from favorites");
     } else {
       setBtnContent("Add to favorites");
     }
-    changeFavoriteStatus(currentPair)
+    changeFavoriteStatus(currentPair);
   }, [currentPair]);
 
   const toggleFavoriteBtn = () => {
@@ -55,15 +53,25 @@ const DetailsPage = () => {
             </thead>
             <tbody>
               <tr>
-                <td>{currentPair ? currentPair.symb.toUpperCase():null}</td>
-                <td className="text-end">{currentPair ? currentPair.data.last_price:null}</td>
-                <td className="text-end">{currentPair ? currentPair.data.high:null}</td>
-                <td className="text-end">{currentPair ? currentPair.data.low:null}</td>
+                <td>{currentPair ? currentPair.symb.toUpperCase() : null}</td>
+                <td className="text-end">
+                  {currentPair ? currentPair.data.last_price : null}
+                </td>
+                <td className="text-end">
+                  {currentPair ? currentPair.data.high : null}
+                </td>
+                <td className="text-end">
+                  {currentPair ? currentPair.data.low : null}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <button className={currentPair.favorite ? 'btnFav remove' : 'btnFav add'} style={{ display: favoritesBtn }} onClick={toggleFavoriteBtn}>
+        <button
+          className={currentPair ? (currentPair.favorite ? "btnFav remove" : "btnFav add"):null}
+          style={{ display: favoritesBtn }}
+          onClick={toggleFavoriteBtn}
+        >
           {btnContent}
         </button>
       </div>

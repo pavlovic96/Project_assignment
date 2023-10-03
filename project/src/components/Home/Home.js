@@ -22,11 +22,12 @@ const Home = () => {
               </tr>
             </thead>
             <tbody>
-              {symbolsData.length === 5
+              {
+              symbolsData ? ( symbolsData.length === 5
                 ? symbolsData.map((symbol, index) => (
                     <TableRow data={symbol} key={index} />
                   ))
-                : null}
+                : null) :null}
             </tbody>
           </table>
         </div>

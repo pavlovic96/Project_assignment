@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./Header.css";
 import { DataContext } from "../../context/DataContextProvider";
 
@@ -13,7 +13,7 @@ const Header = () => {
     } else {
       className = "favorites-disabled";
     }
-    return className
+    return className;
   };
 
   console.log(loginStatus);
@@ -31,9 +31,7 @@ const Header = () => {
           </NavLink>
           <NavLink
             to="/favorites"
-            className={({isActive}) =>
-              setFavorites(isActive)
-            }
+            className={({ isActive }) => setFavorites(isActive)}
           >
             Favorites
           </NavLink>
